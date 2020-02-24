@@ -30,7 +30,7 @@ function createElement(type,props,children){
 }
 //将虚拟节点转换为真实节点  
 function render(vNode){
-    let el = document.createElement(vNode.type || 'div')
+    let el = document.createElement(vNode.type)
     for(let key in vNode.props){
         setAttr(el,key,vNode.props[key])
     }
@@ -46,4 +46,22 @@ function renderDom(el,target){
     window.el = el;
     target.appendChild(el)
 }
-export {createElement,render,renderDom}
+//先序遍历一棵树 根左右（或者说是一个森林）
+let arr = [];//mock stack
+function walk(obj = null){
+    if(obj){
+        console.log(obj.type)
+        let child = obj.children.reverse();
+        child.forEach(item=>{
+            arr.push(item)
+        })
+        while(arr.length>0){
+            let curr = arr.pop();
+            if(curr instanceof Element){
+                walk(curr)
+            }
+        }
+
+    }
+}
+export {createElement,render,renderDom,Element,setAttr,walk}
